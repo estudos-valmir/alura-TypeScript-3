@@ -1,9 +1,10 @@
-import { Negociacoes } from '../models/Negociacoes.js';
-import { Utilitario } from '../Ultils/Utilitario.js';
-import { View } from './View.js';
+import { Escapar } from "../decorators/Escape.js";
+import { Negociacoes } from "../models/Negociacoes.js";
+import { Utilitario } from "../Ultils/Utilitario.js";
+import { View } from "./View.js";
 
-export class NegociacoesView extends View<Negociacoes>{
-
+export class NegociacoesView extends View<Negociacoes> {
+    @Escapar
     protected template(model: Negociacoes): string {
         let teste;
         const template = `
@@ -16,8 +17,10 @@ export class NegociacoesView extends View<Negociacoes>{
                         <th>DIA DA SEMANA</th>
                     </tr>
                     <tbody>
-                        ${teste = model.listar().map(negociacao => {
-            return `
+                        ${(teste = model
+                            .listar()
+                            .map((negociacao) => {
+                                return `
                 <tr>
                     <td>${this.formatar(negociacao.data)}</td>
                     <td>${negociacao.quantidade}</td>
@@ -25,7 +28,8 @@ export class NegociacoesView extends View<Negociacoes>{
                     <td>${Utilitario.obterDiaSemana(negociacao.data)}</td>
                 </tr>
                 `;
-        }).join('')}
+                            })
+                            .join(""))}
                     </tbody>
                 </thead>
             </table>
@@ -34,8 +38,6 @@ export class NegociacoesView extends View<Negociacoes>{
     }
 
     private formatar(data: Date): string {
-
-        return Intl.DateTimeFormat().format(data)
+        return Intl.DateTimeFormat().format(data);
     }
-
 }
